@@ -1,0 +1,31 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  export-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Build Android APK
+        uses: actions/build@v4
+        with:
+          godot_executable: godot
+          export_debug: true
+          project: project.godot
+          preset: Android
+          output: build/ShadowArena-debug.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShadowArena-Android-APK
+          path: build/ShadowArena-debug.apk
+          if-no-files-found: error
+          
